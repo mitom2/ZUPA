@@ -26,7 +26,7 @@ uint memoryAcquireFreePage(uint memoryFreePagesList)
     List l = List @memoryFreePagesList;
     if (!l.size)
     {
-        return uint(0);
+        return uint(0xFF);
     }
     uint addr = l.front;
     ListElement el = ListElement @addr;

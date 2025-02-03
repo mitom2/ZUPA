@@ -1,0 +1,99 @@
+// PROCESS LIBRARY //
+#include "res/list.szl"
+#include "inc/memory.szl"
+
+// Global variables available to every process //
+uint processPid;   // Constant //
+int processStatus; // Process can declare its own state //
+
+object Process
+{
+    // Unique process identifier //
+    uint pid;
+
+    // Process state //
+    int status; // 0: ready, -1: concluded, 1: waiting for I/O //
+
+    // RAM pages of the process //
+    uint pageLow;
+    uint pageMid;
+    uint pageTop;
+}
+
+void processSwitch(Process p)
+{
+    memorySwitchPageLow(p.pageLow);
+    memorySwitchPageMid(p.pageLow);
+    memorySwitchPageTop(p.pageLow);
+    processPid = p.pid;
+    processStatus = p.status;
+}
+
+Process processScheduler(uint processesList, uint memoryFreePagesList, ListElement currentProcess)
+{
+    Process res;
+    List processes = List @processesList;
+    uint addr = 0;
+    uint prev;
+    for (uint i = 0; i < processes.size; i = i + 1)
+    {
+        prev = addr;
+        if (currentProcess.next != uint(0))
+        {
+            addr = currentProcess.next;
+            currentProcess = listNextElement(currentProcess);
+        }
+        else
+        {
+            currentProcess = ListElement @processes.front;
+            addr = processes.front;
+        }
+        res = Process @currentProcess.value;
+        if (!res.status)
+        {
+            return res;
+        }
+        else if (res.status == -1)
+        {
+            listRemove(processesList, addr);
+            currentProcess = ListElement @prev;
+            memoryReleaseFreePage(memoryFreePagesList, res.low);
+            memoryReleaseFreePage(memoryFreePagesList, res.mid);
+            memoryReleaseFreePage(memoryFreePagesList, res.top);
+        }
+    }
+    res.pid = 0;
+    res.status = -2;
+    return res;
+}
+
+void processStart(uint processesList, Process process)
+{
+    uint addr = alloc(sizeof(Process));
+    process->addr;
+    listPushFront(processesList, addr);
+}
+
+bool processKill(uint processesList, uint memoryFreePagesList, uint targetPid)
+{
+    List processes = List @processesList;
+    ListElement el;
+    el.next = processes.front;
+    Process p;
+    uint addr = 0;
+    for (uint i = 0; i < processes.size; i = i + 1)
+    {
+        addr = el.next;
+        el = listNextElement(el);
+        p = Process @el.value;
+        if (p.pid == targetPid)
+        {
+            listRemove(processesList, addr);
+            memoryReleaseFreePage(memoryFreePagesList, p.low);
+            memoryReleaseFreePage(memoryFreePagesList, p.mid);
+            memoryReleaseFreePage(memoryFreePagesList, p.top);
+            return true;
+        }
+    }
+    return false;
+}
