@@ -66,12 +66,12 @@ void gpuSetColor(uint rgb)
     out(0b10101010, int(rgb));
 }
 
-void drawPixel()
+void gpuDrawPixel()
 {
     out(0b10101010, 0b01000000);
 }
 
-void drawLine(uint endX, uint endY)
+void gpuDrawLine(uint endX, uint endY)
 {
     out(0b10101010, 0b01100000);
     out(0b10101010, int(endX));
@@ -80,13 +80,13 @@ void drawLine(uint endX, uint endY)
     out(0b10101010, int(endY >> uint(8)));
 }
 
-void drawChar(char character)
+void gpuDrawChar(char character)
 {
     out(0b10101010, 0b01110000);
     out(0b10101010, int(character));
 }
 
-void drawRectangle(uint endX, uint endY)
+void gpuDrawRectangle(uint endX, uint endY)
 {
     out(0b10101010, 0b01111000);
     out(0b10101010, int(endX));
