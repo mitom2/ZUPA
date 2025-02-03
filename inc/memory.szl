@@ -1,4 +1,5 @@
 // MEMORY MODULE LIBRARY //
+#include "res/list.szl"
 
 void memorySwitchPageSystem(uint num)
 {
@@ -18,4 +19,25 @@ void memorySwitchPageMid(uint num)
 void memorySwitchPageTop(uint num)
 {
     out(0b10111111, int(num));
+}
+
+uint memoryAcquireFreePage(uint memoryFreePagesList)
+{
+    List l = List @memoryFreePagesList;
+    if (!l.size)
+    {
+        return uint(0);
+    }
+    uint addr = l.front;
+    ListElement el = ListElement @addr;
+    uint res = uint @el.value;
+    listPopFront(memoryFreePagesList);
+    return res;
+}
+
+void memoryReleaseFreePage(uint memoryFreePagesList, uint num)
+{
+    uint addr = alloc(sizeof(uint));
+    num->addr;
+    listPushFront(memoryFreePagesList, addr);
 }
