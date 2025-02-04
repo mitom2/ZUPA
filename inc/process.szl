@@ -1,5 +1,5 @@
 // PROCESS LIBRARY //
-#include "res/list.szl"
+#include "inc/list.szl"
 #include "inc/memory.szl"
 
 // Global variables available to every process //

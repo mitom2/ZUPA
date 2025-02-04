@@ -1,46 +1,46 @@
 // I/O OPERATIONS LIBRARY //
-#include "res/vector.szl"
+#include "inc/vector.szl"
 
 void ioInitializeStorage()
 {
-    out(0b10001110, 0b10001001);
+    out(uint(0b10001110), 0b10001001);
 }
 
 void ioBegin()
 {
-    out(0b10001110, 0b00000001);
+    out(uint(0b10001110), 0b00000001);
 }
 
 void ioCancelRead()
 {
-    out(0b10001110, 0b00101111);
+    out(uint(0b10001110), 0b00101111);
 }
 
 void ioDisableInterrupts()
 {
-    out(0b10001110, 0b00000010);
+    out(uint(0b10001110), 0b00000010);
 }
 
 void ioEnableInterrupts()
 {
-    out(0b10001110, 0b00000100);
+    out(uint(0b10001110), 0b00000100);
 }
 
 bool ioCheckDataKeyboard()
 {
-    out(0b10001110, 0b01100000);
+    out(uint(0b10001110), 0b01100000);
     return !in(0b10001110);
 }
 
 char ioReadKeyboard()
 {
-    out(0b10001110, 0b01000001);
+    out(uint(0b10001110), 0b01000001);
     return char(in(0b10001110));
 }
 
 bool ioCheckDataStorage()
 {
-    out(0b10001110, 0b10110000);
+    out(uint(0b10001110), 0b10110000);
     return !in(0b10001110);
 }
 
@@ -48,7 +48,7 @@ Vector ioGetStorageData()
 {
     Vector res = vectorCreate(sizeof(int));
     vectorReserve(?@res, uint(512));
-    out(0b10001110, 0b10100000);
+    out(uint(0b10001110), 0b10100000);
     uint addr = res.address;
     for (int i = 0; i < 512; i = i + 1)
     {
@@ -60,43 +60,43 @@ Vector ioGetStorageData()
 
 void ioReadStorage(ulong sector)
 {
-    out(0b10001110, 0b10111100);
-    out(0b10001110, int(sector));
-    out(0b10001110, int(sector >> uint(8)));
-    out(0b10001110, int(sector >> uint(16)));
-    out(0b10001110, int(sector >> uint(24)));
-    out(0b10001110, 0b10111110);
+    out(uint(0b10001110), 0b10111100);
+    out(uint(0b10001110), int(sector));
+    out(uint(0b10001110), int(sector >> uint(8)));
+    out(uint(0b10001110), int(sector >> uint(16)));
+    out(uint(0b10001110), int(sector >> uint(24)));
+    out(uint(0b10001110), 0b10111110);
 }
 
 void ioCheckReadyWriteStorage()
 {
-    out(0b10001110, 0b10111011);
+    out(uint(0b10001110), 0b10111011);
     return !in(0b10001110);
 }
 
 void ioWriteStorage(ulong sector, uint position, Vector data)
 {
-    out(0b10001110, 0b10111100);
-    out(0b10001110, int(sector));
-    out(0b10001110, int(sector >> uint(8)));
-    out(0b10001110, int(sector >> uint(16)));
-    out(0b10001110, int(sector >> uint(24)));
-    out(0b10001110, 0b10111111);
-    out(0b10001110, 0b10000000);
-    out(0b10001110, int(data.size));
-    out(0b10001110, int(data.size >> uint(8)));
-    out(0b10001110, int(position));
-    out(0b10001110, int(position >> uint(8)));
+    out(uint(0b10001110), 0b10111100);
+    out(uint(0b10001110), int(sector));
+    out(uint(0b10001110), int(sector >> uint(8)));
+    out(uint(0b10001110), int(sector >> uint(16)));
+    out(uint(0b10001110), int(sector >> uint(24)));
+    out(uint(0b10001110), 0b10111111);
+    out(uint(0b10001110), 0b10000000);
+    out(uint(0b10001110), int(data.size));
+    out(uint(0b10001110), int(data.size >> uint(8)));
+    out(uint(0b10001110), int(position));
+    out(uint(0b10001110), int(position >> uint(8)));
     uint addr = data.address;
     for (int i = 0; i < data.size; i = i + 1)
     {
-        out(0b10001110, int @addr);
+        out(uint(0b10001110), int @addr);
         addr = addr + 1;
     }
 }
 
 void ioWriteTimer(int data)
 {
-    out(0b10001110, 0b11000010);
-    out(0b10001110, data);
+    out(uint(0b10001110), 0b11000010);
+    out(uint(0b10001110), data);
 }

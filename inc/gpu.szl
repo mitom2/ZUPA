@@ -2,95 +2,95 @@
 
 void gpuClearScreen()
 {
-    out(0b10101010, 0b10000000);
+    out(uint(0b10101010), 0b10000000);
 }
 
 void gpuSetPointer(uint x, uint y)
 {
-    out(0b10101010, 0b11000000);
-    out(0b10101010, int(x));
-    out(0b10101010, int(x >> uint(8)));
-    out(0b10101010, int(y));
-    out(0b10101010, int(y >> uint(8)));
+    out(uint(0b10101010), 0b11000000);
+    out(uint(0b10101010), int(x));
+    out(uint(0b10101010), int(x >> uint(8)));
+    out(uint(0b10101010), int(y));
+    out(uint(0b10101010), int(y >> uint(8)));
 }
 
 void gpuMovePointer(int x, int y)
 {
-    if (x <= 0 && y <= 0)
+    if (x <= 0 & y <= 0)
     {
-        out(0b10101010, 0b11000010);
-        out(0b10101010, 0 - x);
-        out(0b10101010, (0 - x) >> uint(8));
-        out(0b10101010, 0 - y);
-        out(0b10101010, (0 - y) >> uint(8));
+        out(uint(0b10101010), 0b11000010);
+        out(uint(0b10101010), 0 - x);
+        out(uint(0b10101010), (0 - x) >> uint(8));
+        out(uint(0b10101010), 0 - y);
+        out(uint(0b10101010), (0 - y) >> uint(8));
     }
-    else if (x >= 0 && y >= 0)
+    else if (x >= 0 & y >= 0)
     {
-        out(0b10101010, 0b11000011);
-        out(0b10101010, x);
-        out(0b10101010, x >> uint(8));
-        out(0b10101010, y);
-        out(0b10101010, y >> uint(8));
+        out(uint(0b10101010), 0b11000011);
+        out(uint(0b10101010), x);
+        out(uint(0b10101010), x >> uint(8));
+        out(uint(0b10101010), y);
+        out(uint(0b10101010), y >> uint(8));
     }
-    else if (x <= 0 && y >= 0)
+    else if (x <= 0 & y >= 0)
     {
-        out(0b10101010, 0b11000010);
-        out(0b10101010, 0 - x);
-        out(0b10101010, (0 - x) >> uint(8));
-        out(0b10101010, 0);
-        out(0b10101010, 0);
-        out(0b10101010, 0b11000011);
-        out(0b10101010, 0);
-        out(0b10101010, 0);
-        out(0b10101010, y);
-        out(0b10101010, y >> uint(8));
+        out(uint(0b10101010), 0b11000010);
+        out(uint(0b10101010), 0 - x);
+        out(uint(0b10101010), (0 - x) >> uint(8));
+        out(uint(0b10101010), 0);
+        out(uint(0b10101010), 0);
+        out(uint(0b10101010), 0b11000011);
+        out(uint(0b10101010), 0);
+        out(uint(0b10101010), 0);
+        out(uint(0b10101010), y);
+        out(uint(0b10101010), y >> uint(8));
     }
     else
     {
-        out(0b10101010, 0b11000011);
-        out(0b10101010, x);
-        out(0b10101010, x >> uint(8));
-        out(0b10101010, 0);
-        out(0b10101010, 0);
-        out(0b10101010, 0b11000010);
-        out(0b10101010, 0);
-        out(0b10101010, 0);
-        out(0b10101010, 0 - y);
-        out(0b10101010, (0 - y) >> uint(8));
+        out(uint(0b10101010), 0b11000011);
+        out(uint(0b10101010), x);
+        out(uint(0b10101010), x >> uint(8));
+        out(uint(0b10101010), 0);
+        out(uint(0b10101010), 0);
+        out(uint(0b10101010), 0b11000010);
+        out(uint(0b10101010), 0);
+        out(uint(0b10101010), 0);
+        out(uint(0b10101010), 0 - y);
+        out(uint(0b10101010), (0 - y) >> uint(8));
     }
 }
 
 void gpuSetColor(uint rgb)
 {
-    out(0b10101010, 0b11100000);
-    out(0b10101010, int(rgb));
+    out(uint(0b10101010), 0b11100000);
+    out(uint(0b10101010), int(rgb));
 }
 
 void gpuDrawPixel()
 {
-    out(0b10101010, 0b01000000);
+    out(uint(0b10101010), 0b01000000);
 }
 
 void gpuDrawLine(uint endX, uint endY)
 {
-    out(0b10101010, 0b01100000);
-    out(0b10101010, int(endX));
-    out(0b10101010, int(endX >> uint(8)));
-    out(0b10101010, int(endY));
-    out(0b10101010, int(endY >> uint(8)));
+    out(uint(0b10101010), 0b01100000);
+    out(uint(0b10101010), int(endX));
+    out(uint(0b10101010), int(endX >> uint(8)));
+    out(uint(0b10101010), int(endY));
+    out(uint(0b10101010), int(endY >> uint(8)));
 }
 
 void gpuDrawChar(char character)
 {
-    out(0b10101010, 0b01110000);
-    out(0b10101010, int(character));
+    out(uint(0b10101010), 0b01110000);
+    out(uint(0b10101010), int(character));
 }
 
 void gpuDrawRectangle(uint endX, uint endY)
 {
-    out(0b10101010, 0b01111000);
-    out(0b10101010, int(endX));
-    out(0b10101010, int(endX >> uint(8)));
-    out(0b10101010, int(endY));
-    out(0b10101010, int(endY >> uint(8)));
+    out(uint(0b10101010), 0b01111000);
+    out(uint(0b10101010), int(endX));
+    out(uint(0b10101010), int(endX >> uint(8)));
+    out(uint(0b10101010), int(endY));
+    out(uint(0b10101010), int(endY >> uint(8)));
 }

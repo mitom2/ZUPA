@@ -1,24 +1,24 @@
 // MEMORY MODULE LIBRARY //
-#include "res/list.szl"
+#include "inc/list.szl"
 
 void memorySwitchPageSystem(uint num)
 {
-    out(0b10111100, int(num));
+    out(uint(0b10111100), int(num));
 }
 
 void memorySwitchPageLow(uint num)
 {
-    out(0b10111101, int(num));
+    out(uint(0b10111101), int(num));
 }
 
 void memorySwitchPageMid(uint num)
 {
-    out(0b10111110, int(num));
+    out(uint(0b10111110), int(num));
 }
 
 void memorySwitchPageTop(uint num)
 {
-    out(0b10111111, int(num));
+    out(uint(0b10111111), int(num));
 }
 
 uint memoryAcquireFreePage(uint memoryFreePagesList)

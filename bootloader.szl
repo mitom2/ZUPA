@@ -1,0 +1,32 @@
+// BOOTLOADER PROGRAM //
+#program "ZUPA_bootloader"
+#position "0"
+#include "inc/gpu.szl"
+#include "inc/memory.szl"
+#include "inc/io.szl"
+#include "inc/vector.szl"
+
+void main()
+{
+    memorySwitchPageLow(uint(1));
+    memorySwitchPageMid(uint(2));
+    memorySwitchPageTop(uint(3));
+    ioDisableInterrupts();
+    ioBegin();
+    ioInitializeStorage();
+    for (int i = 0; i < 32; i = i + 1)
+    {
+        ioReadStorage(ulong(i));
+        while (!ioCheckDataStorage())
+        {
+            assembly("NOP");
+        }
+        Vector data = ioGetStorageData();
+        memcpy(data.address, uint(i) * uint(512) + uint(0x4000), uint(512));
+    }
+
+    assembly("JP $C000");
+    assembly(".org $C000");
+    memorySwitchPageSystem(uint(1));
+    assembly("JP %0");
+}
