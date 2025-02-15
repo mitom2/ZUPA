@@ -1,0 +1,77 @@
+#program "ZUPA_os"
+#position "121"
+#include "inc/gpu.szl"
+#include "inc/io.szl"
+#include "inc/vector.szl"
+#include "inc/list.szl"
+#include "inc/process.szl"
+
+void main()
+{
+    // Load welcome screen //
+    // Assuming the bootloader has already set-up the I/O //
+    ioReadStorage(ulong(32));
+    gpuSetColor(uint(0b00000011));
+    gpuClearScreen();
+    gpuSetPointer(uint(0), uint(0));
+    gpuSetColor(uint(0b00111111));
+    while (!ioCheckDataStorage())
+    {
+        assembly("NOP");
+    }
+    Vector data = ioGetStorageData();
+    uint size = uint@vectorAt(?@data, uint(0));
+    for (uint i = uint(1); i <= size; i = i + uint(1))
+    {
+        gpuDrawChar(char@vectorAt(?@data, i));
+    }
+    vectorDelete(?@data);
+
+    // Initialize the system //
+    assembly("IM 1");
+    List processes = listCreate(uint(sizeof(Process)));
+    List memoryPages = listCreate(uint(sizeof(uint)));
+    uint addr = uint(0);
+    for (uint i = uint(5); i < uint(512); i = i + uint(1))
+    {
+        addr = alloc(sizeof(uint));
+        i->addr;
+        listPushFront(?@memoryPages,addr);
+    }
+
+    // Load default shell program (always disk 33-129) //
+    Process shellProc;
+    shellProc.status = 0;
+    shellProc.pid = uint(0);
+    shellProc.pageLow = uint(2);
+    shellProc.pageMid = uint(3);
+    shellProc.pageTop = uint(4);
+    processSwitch(shellProc);
+    processStart(?@processes, shellProc);
+    for (int i = 33; i <= 129; i = i + 1)
+    {
+        ioReadStorage(ulong(i));
+        while (!ioCheckDataStorage())
+        {
+            assembly("NOP");
+        }
+        data = ioGetStorageData();
+        memcpy(data.address, uint(i * 512 + 0x4000), uint(512));
+        vectorDelete(?@data);
+    }
+
+    // Run the program //
+    unlock();
+    assembly("JP $4000");
+}
+
+void osLoop()
+{
+    lock();
+    // TODO: do OS stuff //
+    unlock();
+}
+
+assembly(".org $38");
+osLoop();
+assembly("RETI");

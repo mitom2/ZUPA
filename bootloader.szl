@@ -23,6 +23,7 @@ void main()
         }
         Vector data = ioGetStorageData();
         memcpy(data.address, uint(i * 512 + 0x4000), uint(512));
+        vectorDelete(?@data);
     }
 
     uint addr = uint(0xC001);

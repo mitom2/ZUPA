@@ -2,17 +2,13 @@
 #include "inc/list.szl"
 #include "inc/memory.szl"
 
-// Global variables available to every process //
-uint processPid;   // Constant //
-int processStatus; // Process can declare its own state //
-
 object Process
 {
     // Unique process identifier //
     uint pid;
 
     // Process state //
-    int status; // 0: ready, -1: concluded, 1: waiting for I/O //
+    int status; // 0: ready, -1: concluded, 1: waiting for I/O, 2: waiting for other process to end //
 
     // RAM pages of the process //
     uint pageLow;
@@ -25,8 +21,6 @@ void processSwitch(Process p)
     memorySwitchPageLow(p.pageLow);
     memorySwitchPageMid(p.pageLow);
     memorySwitchPageTop(p.pageLow);
-    processPid = p.pid;
-    processStatus = p.status;
 }
 
 Process processScheduler(uint processesList, uint memoryFreePagesList, ListElement currentProcess)
