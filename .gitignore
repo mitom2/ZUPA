@@ -1,1 +1,3 @@
 .vscode/settings.json
+bootloader.szl.ia
+bootloader.mk

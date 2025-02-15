@@ -25,8 +25,14 @@ void main()
         memcpy(data.address, uint(i * 512 + 0x4000), uint(512));
     }
 
+    uint addr = uint(0xC001);
+    0b100111110->addr;
+    addr = addr + uint(2);
+    0b1011110011010011->addr;
+    addr = addr + uint(2);
+    0b11000011->addr;
+    addr = addr + uint(2);
+    0->addr;
     assembly("JP $C000");
-    assembly(".org $C000");
-    memorySwitchPageSystem(uint(1));
-    assembly("JP %0");
+    assembly(".org $F000");
 }
